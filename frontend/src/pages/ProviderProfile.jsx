@@ -31,7 +31,8 @@ function ProviderProfile() {
     // Real provider: fetch from backend
     const fetchProfile = async () => {
       try {
-        const res = await axios.get(`/api/providers/${id}`);
+        const backendUrl = import.meta.env.VITE_BACKEND_URL;
+        const res = await axios.get(`${backendUrl}/api/providers/${id}`);
         setProfile(res.data);
       } catch {
         setProfile(null);
@@ -39,7 +40,8 @@ function ProviderProfile() {
     };
     const fetchReviews = async () => {
       try {
-        const res = await axios.get(`/api/reviews/${id}`);
+        const backendUrl = import.meta.env.VITE_BACKEND_URL;
+        const res = await axios.get(`${backendUrl}/api/reviews/${id}`);
         setReviews(res.data);
       } catch {
         setReviews([]);

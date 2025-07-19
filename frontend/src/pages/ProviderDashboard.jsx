@@ -10,6 +10,8 @@ function ProviderDashboard() {
   const [availability, setAvailability] = useState([{ date: '', slots: '' }]);
   const [message, setMessage] = useState('');
 
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
   useEffect(() => {
     fetchProfile();
     fetchBookings();
@@ -18,7 +20,7 @@ function ProviderDashboard() {
   const fetchProfile = async () => {
     try {
       const token = localStorage.getItem('token');
-      const res = await axios.get(`/api/providers/${user._id}`);
+      const res = await axios.get(`${backendUrl}/api/providers/${user._id}`);
       setProfile(res.data);
       setForm({
         servicesOffered: res.data.servicesOffered?.join(', ') || '',
@@ -31,7 +33,7 @@ function ProviderDashboard() {
   const fetchBookings = async () => {
     try {
       const token = localStorage.getItem('token');
-      const res = await axios.get('/api/bookings/provider', {
+      const res = await axios.get(`${backendUrl}/api/bookings/provider`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setBookings(res.data);
@@ -51,7 +53,7 @@ function ProviderDashboard() {
     setMessage('');
     try {
       const token = localStorage.getItem('token');
-      await axios.post('/api/providers/profile', {
+      await axios.post(`${backendUrl}/api/providers/profile`, {
         servicesOffered: form.servicesOffered.split(',').map(s => s.trim()),
         description: form.description,
       }, {
@@ -69,7 +71,7 @@ function ProviderDashboard() {
     setMessage('');
     try {
       const token = localStorage.getItem('token');
-      await axios.post('/api/providers/availability', {
+      await axios.post(`${backendUrl}/api/providers/availability`, {
         availability: availability.map(a => ({ date: a.date, slots: a.slots.split(',').map(s => s.trim()) })),
       }, {
         headers: { Authorization: `Bearer ${token}` },

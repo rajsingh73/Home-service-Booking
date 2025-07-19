@@ -9,11 +9,12 @@ function Booking() {
   const [time, setTime] = useState('');
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await axios.get(`/api/providers/${providerId}`);
+        const res = await axios.get(`${backendUrl}/api/providers/${providerId}`);
         setProfile(res.data);
       } catch {}
     };
@@ -25,7 +26,7 @@ function Booking() {
     setMessage('');
     try {
       const token = localStorage.getItem('token');
-      await axios.post('/api/bookings', {
+      await axios.post(`${backendUrl}/api/bookings`, {
         providerId,
         serviceType: profile.servicesOffered[0],
         date,

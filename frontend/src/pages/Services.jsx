@@ -15,12 +15,13 @@ function Services() {
   const [providers, setProviders] = useState([]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   const fetchProviders = async (category) => {
     setSelected(category);
     setLoading(true);
     try {
-      const res = await axios.get(`/api/providers?category=${category}`);
+      const res = await axios.get(`${backendUrl}/api/providers?category=${category}`);
       setProviders(res.data);
     } catch {
       setProviders([]);

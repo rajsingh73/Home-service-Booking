@@ -20,6 +20,8 @@ function UserDashboard() {
   const [bookingModal, setBookingModal] = useState({ open: false, provider: null, availability: [] });
   const [bookingForm, setBookingForm] = useState({ date: '', time: '' });
 
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
   useEffect(() => {
     if (activeTab === 'bookings') fetchBookings();
   }, [activeTab]);
@@ -27,7 +29,7 @@ function UserDashboard() {
   const fetchBookings = async () => {
     try {
       const token = localStorage.getItem('token');
-      const res = await axios.get('/api/bookings/user', {
+      const res = await axios.get(`${backendUrl}/api/bookings/user`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setBookings(res.data);
@@ -42,7 +44,7 @@ function UserDashboard() {
     setMessage('');
     try {
       const token = localStorage.getItem('token');
-      await axios.post('/api/reviews', {
+      await axios.post(`${backendUrl}/api/reviews`, {
         providerId,
         rating: review[providerId]?.rating,
         comment: review[providerId]?.comment,
@@ -60,7 +62,7 @@ function UserDashboard() {
   const fetchProviders = async (category) => {
     setSelectedCategory(category);
     try {
-      const res = await axios.get(`/api/providers?category=${category}`);
+      const res = await axios.get(`${backendUrl}/api/providers?category=${category}`);
       setProviders(res.data);
     } catch {
       setProviders([]);
@@ -70,7 +72,7 @@ function UserDashboard() {
   const openBookingModal = async (provider) => {
     // Fetch provider profile to get up-to-date availability
     try {
-      const res = await axios.get(`/api/providers/${provider._id}`);
+      const res = await axios.get(`${backendUrl}/api/providers/${provider._id}`);
       setBookingModal({ open: true, provider, availability: res.data.availability });
       setBookingForm({ date: '', time: '' });
     } catch {
@@ -84,7 +86,7 @@ function UserDashboard() {
     setMessage('');
     try {
       const token = localStorage.getItem('token');
-      await axios.post('/api/bookings', {
+      await axios.post(`${backendUrl}/api/bookings`, {
         providerId: bookingModal.provider._id,
         serviceType: selectedCategory,
         date: bookingForm.date,
@@ -105,7 +107,7 @@ function UserDashboard() {
     setMessage('');
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`/api/bookings/${bookingId}`, {
+      await axios.delete(`${backendUrl}/api/bookings/${bookingId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setMessage('Booking cancelled!');

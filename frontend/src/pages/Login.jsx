@@ -6,14 +6,16 @@ function Login() {
   const [form, setForm] = useState({ email: '', password: '', role: 'user' });
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
+  console.log(`Helloo ${backendUrl}`);
   const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async e => {
     e.preventDefault();
     setError('');
     try {
-      const res = await axios.post('/api/auth/login', form);
+      const res = await axios.post(`${backendUrl}/api/auth/login`, form);
       localStorage.setItem('token', res.data.token);
       localStorage.setItem('user', JSON.stringify(res.data.user));
       if (res.data.user.role === 'provider') navigate('/provider/dashboard');

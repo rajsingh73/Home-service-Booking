@@ -7,6 +7,7 @@ function Register() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const navigate = useNavigate();
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
 
@@ -15,7 +16,7 @@ function Register() {
     setError('');
     setSuccess('');
     try {
-      await axios.post('/api/auth/register', form);
+      await axios.post(`${backendUrl}/api/auth/register`, form);
       setSuccess('Registration successful! Please login.');
       setTimeout(() => navigate('/login'), 1500);
     } catch (err) {
